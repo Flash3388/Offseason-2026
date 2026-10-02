@@ -5,12 +5,10 @@ import frc.robot.subsystems.IntakeArmSystem;
 
 public class SetIntakeToPositionCommand extends Command {
     private final IntakeArmSystem intakeArmSystem;
-    private final double targetPosition;
     private final double targetAngle;
 
     public SetIntakeToPositionCommand(IntakeArmSystem intakeArmSystem, double targetAngle) {
         this.intakeArmSystem = intakeArmSystem;
-        this.targetPosition = targetAngle / 360;
         this.targetAngle = targetAngle;
 
         addRequirements(intakeArmSystem);
@@ -18,7 +16,7 @@ public class SetIntakeToPositionCommand extends Command {
 
     @Override
     public void initialize() {
-        intakeArmSystem.setIntakeArmToPosition(targetPosition);
+        intakeArmSystem.setIntakeArmToPosition(targetAngle);
     }
 
     @Override

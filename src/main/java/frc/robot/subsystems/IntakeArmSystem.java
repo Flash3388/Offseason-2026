@@ -42,8 +42,8 @@ public class IntakeArmSystem extends SubsystemBase {
         motorPid = intakeArmMotor.getClosedLoopController();
     }
 
-    public void setIntakeArmToPosition(double position) {
-        motorPid.setSetpoint(position, SparkMax.ControlType.kPosition);
+    public void setIntakeArmToPosition(double angle) {
+        motorPid.setSetpoint(angle /360, SparkMax.ControlType.kPosition);
     }
 
 
