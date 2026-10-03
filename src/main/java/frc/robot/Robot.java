@@ -2,14 +2,17 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.IntakeArmSystem;
 import frc.robot.subsystems.PitcherSystem;
 
 public class Robot extends TimedRobot {
+    private IntakeArmSystem intakeArmSystem;
 
     public PitcherSystem pitcherSystem;
 
     @Override
     public void robotInit() {
+        intakeArmSystem = new IntakeArmSystem();
         pitcherSystem = new PitcherSystem();
     }
 
