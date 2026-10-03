@@ -8,15 +8,20 @@ import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.sim.IntakeArmSim;
 
 public class IntakeArmSystem extends SubsystemBase {
 
     private final SparkMax intakeArmMotor;
     private final AbsoluteEncoder absoluteEncoder;
     private final SparkClosedLoopController motorPid;
+
+    private final IntakeArmSim sim;
 
     public IntakeArmSystem(){
         intakeArmMotor = new SparkMax(RobotMap.INTAKE_ARM_SYSTEM_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
@@ -40,6 +45,13 @@ public class IntakeArmSystem extends SubsystemBase {
         absoluteEncoder = intakeArmMotor.getAbsoluteEncoder();
 
         motorPid = intakeArmMotor.getClosedLoopController();
+
+        if (RobotBase.isSimulation()) {
+            sim = new IntakeArmSim(intakeArmMotor);
+            SmartDashboard.putData("IntakeArmSim", sim);
+        } else {
+            sim = null;
+        }
     }
 
     public void setIntakeArmToPosition(double angle) {
@@ -69,5 +81,10 @@ public class IntakeArmSystem extends SubsystemBase {
 
     public void stop(){
         intakeArmMotor.set(0);
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        sim.update();
     }
 }

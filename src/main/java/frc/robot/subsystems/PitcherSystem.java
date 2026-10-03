@@ -8,13 +8,19 @@ import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotMap;
+import frc.robot.sim.PitcherSim;
 
 public class PitcherSystem extends SubsystemBase {
+
     private final SparkMax pitcherMotor;
     private final AbsoluteEncoder encoder;
     private final SparkClosedLoopController motorPid;
+
+    private final PitcherSim sim;
 
     public PitcherSystem() {
         this.pitcherMotor = new SparkMax(RobotMap.PITCHER_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
@@ -41,8 +47,14 @@ public class PitcherSystem extends SubsystemBase {
 
         this.encoder = pitcherMotor.getAbsoluteEncoder();
         this.motorPid = pitcherMotor.getClosedLoopController();
-    }
 
+        if (RobotBase.isSimulation()) {
+            sim = new PitcherSim(pitcherMotor);
+            SmartDashboard.putData("PitcherSim", sim);
+        } else {
+            sim = null;
+        }
+    }
 
     public void stop() {
         //stop the motor
@@ -69,5 +81,10 @@ public class PitcherSystem extends SubsystemBase {
         return
                 MathUtil.isNear(targetPosition, getPitcherPositionDegrees(), 1)
                 && Math.abs(getPitcherVelocityRPM()) < 0.05;
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        sim.update();
     }
 }
