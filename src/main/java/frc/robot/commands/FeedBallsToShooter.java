@@ -6,7 +6,7 @@ import frc.robot.subsystems.FeederSystem;
 public class FeedBallsToShooter extends Command {
     private final FeederSystem feederSystem;
     public FeedBallsToShooter(FeederSystem feederSystem) {
-        this.feederSystem = new FeederSystem();
+        this.feederSystem = feederSystem;
         addRequirements(feederSystem);
     }
 

@@ -17,7 +17,7 @@ public class FeederSystem extends SubsystemBase {
 
         //configuration
         SparkMaxConfig config = new SparkMaxConfig();
-        config.idleMode(SparkBaseConfig.IdleMode.kBrake);
+        config.idleMode(SparkBaseConfig.IdleMode.kCoast);
         this.feederMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
     //move the motor at a constant speed
