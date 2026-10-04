@@ -6,6 +6,7 @@ import frc.robot.commands.RotateShooterAtSpeed;
 import frc.robot.subsystems.ShooterSystem;
 import frc.robot.subsystems.IntakeArmSystem;
 import frc.robot.subsystems.PitcherSystem;
+import frc.robot.subsystems.StorageSystem;
 
 public class Robot extends TimedRobot {
     private IntakeArmSystem intakeArmSystem;
@@ -14,11 +15,14 @@ public class Robot extends TimedRobot {
 
     private ShooterSystem shooterSystem;
 
+    private StorageSystem storageSystem;
+
     @Override
     public void robotInit() {
         this.shooterSystem = new ShooterSystem();
         intakeArmSystem = new IntakeArmSystem();
         pitcherSystem = new PitcherSystem();
+        storageSystem = new StorageSystem();
     }
 
     @Override

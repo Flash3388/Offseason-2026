@@ -41,4 +41,8 @@ public class RobotMap {
     public static final double INTAKE_ARM_MOI = 1 / 3.0 * INTAKE_ARM_MASS_KG * INTAKE_ARM_LENGTH_METERS * INTAKE_ARM_LENGTH_METERS;
     public static final double INTAKE_ARM_MIN_ANGLE_DEGREES = 0;
     public static final double INTAKE_ARM_MAX_ANGLE_DEGREES = 0;
+
+    public static final int STORAGE_MOTOR_ID = 12;
+    public static final int PROXIMITY_SENSOR_ID = 13;
+    public static final double CONVEYOR_SPEED = 0.5;
 }
