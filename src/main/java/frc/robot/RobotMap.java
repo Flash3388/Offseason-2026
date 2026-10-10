@@ -45,4 +45,6 @@ public class RobotMap {
     public static final int STORAGE_MOTOR_ID = 12;
     public static final int PROXIMITY_SENSOR_ID = 13;
     public static final double CONVEYOR_SPEED = 0.5;
+
+    public static final int FEEDER_MOTOR_ID = 1;
 }

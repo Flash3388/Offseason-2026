@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.FeederSystem;
 import frc.robot.commands.RotateShooterAtSpeed;
 import frc.robot.subsystems.ShooterSystem;
 import frc.robot.subsystems.IntakeArmSystem;
@@ -16,6 +17,7 @@ public class Robot extends TimedRobot {
     private ShooterSystem shooterSystem;
 
     private StorageSystem storageSystem;
+    private FeederSystem feederSystem;
 
     @Override
     public void robotInit() {
@@ -23,6 +25,7 @@ public class Robot extends TimedRobot {
         intakeArmSystem = new IntakeArmSystem();
         pitcherSystem = new PitcherSystem();
         storageSystem = new StorageSystem();
+        feederSystem = new FeederSystem();
     }
 
     @Override
