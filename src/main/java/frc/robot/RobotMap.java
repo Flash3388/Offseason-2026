@@ -12,7 +12,7 @@ public class RobotMap {
     public static final double SHOOTER_D_GAIN = 0;
 
     public static final int INTAKE_ARM_SYSTEM_MOTOR_ID = 0;
-
+    public static final int INTAKE_COLLECTOR_SYSTEM_MOTOR_ID = 0;
     public static final int PITCHER_MOTOR_ID = 11; //not real values
     public static final double PITCHER_PID_KP = 0;
     public static final double PITCHER_PID_KI = 0;

@@ -2,27 +2,27 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.FeederSystem;
+import frc.robot.subsystems.*;
 import frc.robot.commands.RotateShooterAtSpeed;
-import frc.robot.subsystems.ShooterSystem;
-import frc.robot.subsystems.IntakeArmSystem;
-import frc.robot.subsystems.PitcherSystem;
-import frc.robot.subsystems.StorageSystem;
 
 public class Robot extends TimedRobot {
     private IntakeArmSystem intakeArmSystem;
+
+    private IntakeCollectorSystem intakeCollectorSystem;
 
     public PitcherSystem pitcherSystem;
 
     private ShooterSystem shooterSystem;
 
     private StorageSystem storageSystem;
+
     private FeederSystem feederSystem;
 
     @Override
     public void robotInit() {
         this.shooterSystem = new ShooterSystem();
         intakeArmSystem = new IntakeArmSystem();
+        intakeCollectorSystem = new IntakeCollectorSystem();
         pitcherSystem = new PitcherSystem();
         storageSystem = new StorageSystem();
         feederSystem = new FeederSystem();
