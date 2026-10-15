@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.RobotMap;
@@ -22,10 +23,18 @@ public class SwerveDriveCommand extends Command {
 
     @Override
     public void execute() {
+        double Lx = -xboxController.getLeftX();
+        double Ly = -xboxController.getLeftY();
+        double Rx = -xboxController.getRightX();
+
+        if (MathUtil.isNear(0, Lx, 0.04)) {Lx = 0;}
+        if (MathUtil.isNear(0, Ly, 0.04)) {Ly = 0;}
+        if (MathUtil.isNear(0, Rx, 0.04 )) {Rx = 0;}
+
         swerveSystem.drive(
-                -xboxController.getLeftY() * RobotMap.SWERVE_MAX_SPEED_METERS_PER_SECOND,
-                 xboxController.getLeftX() * RobotMap.SWERVE_MAX_SPEED_METERS_PER_SECOND,
-                xboxController.getRightX() * RobotMap.SWERVE_MAX_SPEED_RAD_PER_SECOND);
+                Ly * Math.abs(Ly) * RobotMap.SWERVE_MAX_SPEED_METERS_PER_SECOND,
+                Lx * Math.abs(Lx) * RobotMap.SWERVE_MAX_SPEED_METERS_PER_SECOND ,
+                Rx * Math.abs(Rx) * RobotMap.SWERVE_MAX_SPEED_RAD_PER_SECOND);
     }
 
     @Override
@@ -37,4 +46,7 @@ public class SwerveDriveCommand extends Command {
     public boolean isFinished() {
         return false;
     }
+
+
+    //BR 3.7deg clockwise
 }

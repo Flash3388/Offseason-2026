@@ -1,13 +1,21 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.SwerveSystem;
 
 public class Robot extends TimedRobot {
 
+    private SwerveSystem swerveSystem;
+    private XboxController xboxController;
+
     @Override
     public void robotInit() {
-
+        swerveSystem = new SwerveSystem();
+        xboxController = new XboxController(0);
+        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xboxController));
     }
 
     @Override
@@ -42,7 +50,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
+        swerveSystem.swerveDrive.getModules()[2].setAngle(0);
+        //swerveSystem.drive(1, 0, 0);
     }
 
     @Override

@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class SwerveSystem extends SubsystemBase {
-    private final SwerveDrive swerveDrive;
+    public final SwerveDrive swerveDrive;
 
     public SwerveSystem() {
         File file = new File(Filesystem.getDeployDirectory(), "swerve");
