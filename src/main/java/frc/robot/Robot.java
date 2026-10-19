@@ -1,7 +1,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.SetIntakeToPositionCommand;
 import frc.robot.subsystems.*;
 import frc.robot.commands.RotateShooterAtSpeed;
 
@@ -26,6 +28,8 @@ public class Robot extends TimedRobot {
         pitcherSystem = new PitcherSystem();
         storageSystem = new StorageSystem();
         feederSystem = new FeederSystem();
+
+
     }
 
     @Override
@@ -60,12 +64,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-
     }
 
     @Override
     public void teleopPeriodic() {
-
+        intakeArmSystem.setIntakeArmToPosition(60);
     }
 
     @Override
@@ -88,14 +91,45 @@ public class Robot extends TimedRobot {
 
     }
 
+    double kp = 0;
+    double ki = 0;
+    double kd = 0;
     @Override
     public void testInit() {
+        intakeArmSystem.setIntakeArmToPosition(45);
+        SmartDashboard.putNumber("KP", 0);
+        kp = 0;
+        SmartDashboard.putNumber("KI", 0);
+        ki = 0;
+        SmartDashboard.putNumber("KD", 0);
+        kd = 0;
 
     }
 
     @Override
     public void testPeriodic() {
+        boolean config = false;
+        double kp = SmartDashboard.getNumber("KP", 0);
+        if (this.kp != kp) {
+            this.kp = kp;
+            config = true;
+        }
 
+        double ki = SmartDashboard.getNumber("KI", 0);
+        if (this.ki != ki) {
+            this.ki = ki;
+            config = true;
+        }
+
+        double kd = SmartDashboard.getNumber("KD", 0);
+        if (this.kd != kd) {
+            this.kd = kd;
+            config = true;
+        }
+
+        if (config) {
+            intakeArmSystem.setPID(kp, ki, kd);
+        }
     }
 
     @Override
