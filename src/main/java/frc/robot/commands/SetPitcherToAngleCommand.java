@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotMap;
 import frc.robot.subsystems.PitcherSystem;
 
 public class SetPitcherToAngleCommand extends Command {
@@ -9,7 +10,7 @@ public class SetPitcherToAngleCommand extends Command {
 
     public SetPitcherToAngleCommand(PitcherSystem pitcherSubsystem, double angle) {
         this.pitcherSystem = pitcherSubsystem;
-        this.targetPosition = angle / 360;
+        this.targetPosition = RobotMap.PITCHER_GEAR_RATIO * angle / 360;
 
         addRequirements(pitcherSubsystem);
     }
@@ -23,7 +24,8 @@ public class SetPitcherToAngleCommand extends Command {
     @Override
     public boolean isFinished() {
         //stops command when the system reached its target state
-        return pitcherSystem.didReachPosition(targetPosition);
+        return false;
+        //return pitcherSystem.didReachPosition(targetPosition);
     }
 
     @Override

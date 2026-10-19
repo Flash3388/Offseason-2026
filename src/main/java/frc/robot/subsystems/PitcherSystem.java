@@ -56,15 +56,29 @@ public class PitcherSystem extends SubsystemBase {
         }
     }
 
+    public void set(double speed) {
+        this.pitcherMotor.set(speed);
+    }
+
     public void stop() {
         //stop the motor
         pitcherMotor.set(0);
+    }
+
+    public void MovePitcher(double target) {
+        pitcherMotor.set(target + RobotMap.PITCHER_STATIC_GAIN);
     }
 
     public void setPitcherToPosition(double position) {
         //pass new setpoint to the pid
         motorPid.setSetpoint(position, SparkMax.ControlType.kPosition);
     }
+
+//    public void MovePitcherToPos(double target) {
+//        motorPid.setSetpoint(target, SparkBase.ControlType.kPosition,
+//                ClosedLoopSlot.kSlot1,getPitcherPositionDegrees(), SparkClosedLoopController.ArbFFUnits.kVoltage);
+//    }
+
 
     public double getPitcherVelocityRPM() {
         //get encoder velocity

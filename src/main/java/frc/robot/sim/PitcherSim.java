@@ -13,6 +13,7 @@ import edu.wpi.first.networktables.NTSendableBuilder;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -26,7 +27,7 @@ public class PitcherSim implements NTSendable {
     private static final Color8Bit MECHANISM_COLOR_SWITCH_ON = new Color8Bit(Color.kGreen);
 
     private final SparkMaxSim motorSim;
-    private final DCMotorSim sim;
+    private final SingleJointedArmSim sim;
     private final SparkLimitSwitchSim forwardLimitSwitchSim;
     private final SparkLimitSwitchSim reverseLimitSwitchSim;
 
@@ -43,9 +44,14 @@ public class PitcherSim implements NTSendable {
 
     public PitcherSim(SparkMax pitchMotor) {
         motorSim = new SparkMaxSim(pitchMotor, RobotMap.PITCHER_MOTOR);
-        sim = new DCMotorSim(
-                LinearSystemId.createDCMotorSystem(RobotMap.PITCHER_MOTOR, RobotMap.PITCHER_MOI, RobotMap.PITCHER_GEAR_RATIO),
-                RobotMap.PITCHER_MOTOR);
+        sim = new SingleJointedArmSim(
+                RobotMap.PITCHER_MOTOR,
+                RobotMap.PITCHER_GEAR_RATIO,
+                RobotMap.PITCHER_MOI,
+                RobotMap.PITCHER_LENGTH_M,
+                Math.toRadians(RobotMap.PITCHER_MIN_ANGLE_DEGREES),
+                Math.toRadians(RobotMap.PITCHER_MAX_ANGLE_DEGREES),
+                true, 0);
         forwardLimitSwitchSim = motorSim.getForwardLimitSwitchSim();
         reverseLimitSwitchSim = motorSim.getReverseLimitSwitchSim();
 
@@ -62,22 +68,22 @@ public class PitcherSim implements NTSendable {
     public void update() {
         double batteryVoltage = RobotController.getBatteryVoltage();
         double volts = motorSim.getAppliedOutput() * batteryVoltage;
-        if (Math.toDegrees(sim.getAngularPositionRad()) >= RobotMap.PITCHER_MAX_ANGLE_DEGREES && volts > 0) {
+        if (Math.toDegrees(sim.getAngleRads()) >= RobotMap.PITCHER_MAX_ANGLE_DEGREES && volts > 0) {
             sim.setState(Math.toRadians(RobotMap.PITCHER_MAX_ANGLE_DEGREES), 0);
             volts = 0;
-        } else if (Math.toDegrees(sim.getAngularPositionRad()) <= RobotMap.PITCHER_MIN_ANGLE_DEGREES && volts < 0) {
+        } else if (Math.toDegrees(sim.getAngleRads()) <= RobotMap.PITCHER_MIN_ANGLE_DEGREES && volts < 0) {
             sim.setState(Math.toRadians(RobotMap.PITCHER_MIN_ANGLE_DEGREES), 0);
             volts = 0;
         }
         sim.setInputVoltage(volts);
         sim.update(0.020);
         motorSim.iterate(
-                Units.radiansPerSecondToRotationsPerMinute(sim.getAngularVelocityRadPerSec()),
+                Units.radiansPerSecondToRotationsPerMinute(sim.getVelocityRadPerSec()),
                 batteryVoltage,
                 0.020);
 
-        double posDegrees = Math.toDegrees(sim.getAngularPositionRad());
-        double velDps = Math.toDegrees(sim.getAngularVelocityRadPerSec());
+        double posDegrees = Math.toDegrees(sim.getAngleRads());
+        double velDps = Math.toDegrees(sim.getVelocityRadPerSec());
         motorSim.getAbsoluteEncoderSim().setPosition(posDegrees / 360);
 
         boolean atTop = MathUtil.isNear(RobotMap.PITCHER_MAX_ANGLE_DEGREES, posDegrees, 5);
@@ -100,8 +106,8 @@ public class PitcherSim implements NTSendable {
     public void initSendable(NTSendableBuilder builder) {
         NetworkTable table = builder.getTable().getSubTable("Values");
 
-        positionEntryPub = table.getDoubleTopic("PositionMeters").publish();
-        velocityEntryPub = table.getDoubleTopic("VelocityMps").publish();
+        positionEntryPub = table.getDoubleTopic("PositionDegrees").publish();
+        velocityEntryPub = table.getDoubleTopic("VelocityDps").publish();
         hitBottomEntryPub = table.getBooleanTopic("HitBottom").publish();
         hitTopEntryPub = table.getBooleanTopic("HitTop").publish();
         canSendEntries = true;

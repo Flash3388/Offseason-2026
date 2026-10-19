@@ -36,9 +36,14 @@ public class ShooterSystem extends SubsystemBase {
         }
     }
 
-    public void setToVelocity(double velocityRpm) {
-        double ff = velocityRpm / RobotMap.MAX_SHOOTER_VELOCITY_RPM; // this adds feedforward to help the shooter reach the target velocity faster.
-        PIDMotor.setSetpoint(velocityRpm, SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kPercentOut);
+//    public void setToVelocity(double velocityRpm) {
+//        double ff = velocityRpm / RobotMap.MAX_SHOOTER_VELOCITY_RPM; // this adds feedforward to help the shooter reach the target velocity faster.
+//        PIDMotor.setSetpoint(velocityRpm, SparkMax.ControlType.kVelocity, ClosedLoopSlot.kSlot0, ff, SparkClosedLoopController.ArbFFUnits.kPercentOut);
+//    }
+
+    public void setToVelocity(double target) {
+        double output = RobotMap.SHOOTER_V_GAIN * target;
+        motor.set(output);
     }
 
     public void stop() {

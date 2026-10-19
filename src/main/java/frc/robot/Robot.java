@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.SetPitcherToAngleCommand;
 import frc.robot.subsystems.FeederSystem;
 import frc.robot.commands.RotateShooterAtSpeed;
 import frc.robot.subsystems.ShooterSystem;
@@ -60,6 +61,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        CommandScheduler.getInstance().schedule(new SetPitcherToAngleCommand(pitcherSystem, 30));
+//        CommandScheduler.getInstance().schedule(new RotateShooterAtSpeed(shooterSystem , 4000));
 
     }
 
@@ -75,7 +78,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-
+        pitcherSystem.stop();
     }
 
     @Override
