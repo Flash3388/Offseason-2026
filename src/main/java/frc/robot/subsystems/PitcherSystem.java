@@ -65,19 +65,18 @@ public class PitcherSystem extends SubsystemBase {
         pitcherMotor.set(0);
     }
 
-    public void MovePitcher(double target) {
-        pitcherMotor.set(target + RobotMap.PITCHER_STATIC_GAIN);
-    }
+
 
     public void setPitcherToPosition(double position) {
         //pass new setpoint to the pid
-        motorPid.setSetpoint(position, SparkMax.ControlType.kPosition);
+        motorPid.setSetpoint(position, SparkMax.ControlType.kPosition , ClosedLoopSlot.kSlot0, getFeedFowardValue(), SparkClosedLoopController.ArbFFUnits.kPercentOut);
+
     }
 
-//    public void MovePitcherToPos(double target) {
-//        motorPid.setSetpoint(target, SparkBase.ControlType.kPosition,
-//                ClosedLoopSlot.kSlot1,getPitcherPositionDegrees(), SparkClosedLoopController.ArbFFUnits.kVoltage);
-//    }
+    public double getFeedFowardValue() {
+        return RobotMap.PITCHER_STATIC_GAIN * Math.cos(Math.toRadians(getPitcherPositionDegrees()));
+    }
+
 
 
     public double getPitcherVelocityRPM() {
@@ -94,7 +93,7 @@ public class PitcherSystem extends SubsystemBase {
         //checking to see if the encoder position and velocity is close enough to the target
         return
                 MathUtil.isNear(targetPosition, getPitcherPositionDegrees(), 1)
-                && Math.abs(getPitcherVelocityRPM()) < 0.05;
+                && Math.abs(getPitcherVelocityRPM()) < 0.0005;
     }
 
     @Override

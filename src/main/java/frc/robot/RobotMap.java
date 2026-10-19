@@ -1,10 +1,11 @@
 package frc.robot;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import frc.robot.commands.SetPitcherToAngleCommand;
 
 public class RobotMap {
 
-    public static final double PITCHER_STATIC_GAIN = 0.0;
+    public static final double PITCHER_STATIC_GAIN = 0.040405 / Math.cos(Math.toRadians(15));
 
     private RobotMap() {}
 
@@ -17,8 +18,8 @@ public class RobotMap {
     public static final int INTAKE_ARM_SYSTEM_MOTOR_ID = 0;
 
     public static final int PITCHER_MOTOR_ID = 11; //not real values
-    public static final double PITCHER_PID_KP = 7;
-    public static final double PITCHER_PID_KI = 0.2;
+    public static final double PITCHER_PID_KP = 8;
+    public static final double PITCHER_PID_KI = 0;
     public static final double PITCHER_PID_KD = 0;
 
 

@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        CommandScheduler.getInstance().schedule(new SetPitcherToAngleCommand(pitcherSystem, 30));
+        CommandScheduler.getInstance().schedule(new SetPitcherToAngleCommand(pitcherSystem, 15));
 //        CommandScheduler.getInstance().schedule(new RotateShooterAtSpeed(shooterSystem , 4000));
 
     }
