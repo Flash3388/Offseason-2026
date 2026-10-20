@@ -5,9 +5,8 @@ import frc.robot.commands.SetPitcherToAngleCommand;
 
 public class RobotMap {
 
-    public static final double PITCHER_STATIC_GAIN = 0.040405 / Math.cos(Math.toRadians(15));
-
     private RobotMap() {}
+
 
     public static final int SHOOTER_MOTOR_ID = 1;
     public static final double SHOOTER_P_GAIN = 0;
@@ -18,9 +17,10 @@ public class RobotMap {
     public static final int INTAKE_ARM_SYSTEM_MOTOR_ID = 0;
 
     public static final int PITCHER_MOTOR_ID = 11; //not real values
-    public static final double PITCHER_PID_KP = 8;
+    public static final double PITCHER_PID_KP = 3;
     public static final double PITCHER_PID_KI = 0;
-    public static final double PITCHER_PID_KD = 0;
+    public static final double PITCHER_PID_KD = 0.1;
+    public static final double PITCHER_STATIC_GAIN = 0.040405 / Math.cos(Math.toRadians(15));
 
 
     public static final DCMotor SHOOTER_MOTOR = DCMotor.getNeoVortex(1);

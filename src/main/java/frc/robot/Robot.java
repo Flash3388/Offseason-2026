@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.SetPitcherToAngleCommand;
 import frc.robot.subsystems.FeederSystem;
 import frc.robot.commands.RotateShooterAtSpeed;
@@ -17,6 +18,8 @@ public class Robot extends TimedRobot {
 
     private ShooterSystem shooterSystem;
 
+    private CommandXboxController xbox;
+
     private StorageSystem storageSystem;
     private FeederSystem feederSystem;
 
@@ -27,6 +30,7 @@ public class Robot extends TimedRobot {
         pitcherSystem = new PitcherSystem();
         storageSystem = new StorageSystem();
         feederSystem = new FeederSystem();
+        xbox = new CommandXboxController(0);
     }
 
     @Override
@@ -61,7 +65,10 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        CommandScheduler.getInstance().schedule(new SetPitcherToAngleCommand(pitcherSystem, 15));
+        xbox.x().whileTrue(new SetPitcherToAngleCommand(pitcherSystem, 10));
+        xbox.y().whileTrue(new SetPitcherToAngleCommand(pitcherSystem, 20));
+        xbox.b().whileTrue(new SetPitcherToAngleCommand(pitcherSystem, 30));
+        xbox.a().whileTrue(new SetPitcherToAngleCommand(pitcherSystem, 15));
 //        CommandScheduler.getInstance().schedule(new RotateShooterAtSpeed(shooterSystem , 4000));
 
     }
