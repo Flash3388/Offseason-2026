@@ -46,7 +46,7 @@ public class ShooterSim implements NTSendable {
     public void initSendable(NTSendableBuilder builder) {
         NetworkTable table = builder.getTable().getSubTable("Values");
 
-        velocityEntryPub = table.getDoubleTopic("VelocityMps").publish();
+        velocityEntryPub = table.getDoubleTopic("VelocityRpm").publish();
         canSendEntries = true;
     }
 }
