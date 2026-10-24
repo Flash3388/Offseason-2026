@@ -20,6 +20,7 @@ public class IntakeArmSystem extends SubsystemBase {
     private final SparkMax intakeArmMotor;
     private final AbsoluteEncoder absoluteEncoder;
     private final SparkClosedLoopController motorPid;
+    private final SparkMaxConfig maxConfig;
 
     private final IntakeArmSim sim;
 
@@ -27,6 +28,7 @@ public class IntakeArmSystem extends SubsystemBase {
         intakeArmMotor = new SparkMax(RobotMap.INTAKE_ARM_SYSTEM_MOTOR_ID, SparkLowLevel.MotorType.kBrushless);
 
         SparkMaxConfig config = new SparkMaxConfig();
+        maxConfig = config;
 
         config.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
@@ -37,7 +39,7 @@ public class IntakeArmSystem extends SubsystemBase {
                 .reverseLimitSwitchType(LimitSwitchConfig.Type.kNormallyOpen)
                 .reverseLimitSwitchTriggerBehavior(LimitSwitchConfig.Behavior.kStopMovingMotor);
 
-        config.closedLoop.pid(RobotMap.PITCHER_PID_KP, RobotMap.PITCHER_PID_KI, RobotMap.PITCHER_PID_KD)
+        config.closedLoop.pid(RobotMap.INTAKE_ARM_PID_KP, RobotMap.INTAKE_ARM_PID_KI, RobotMap.INTAKE_ARM_PID_KD)
                 .feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
 
         intakeArmMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
@@ -54,8 +56,8 @@ public class IntakeArmSystem extends SubsystemBase {
         }
     }
 
-    public void setIntakeArmToPosition(double angle) {
-        motorPid.setSetpoint(angle /360, SparkMax.ControlType.kPosition);
+    public void set(double speed) {
+        intakeArmMotor.set(speed);
     }
 
 
@@ -67,15 +69,26 @@ public class IntakeArmSystem extends SubsystemBase {
         return absoluteEncoder.getVelocity();
     }
 
+    public double getFeedForwardValue(){
+        return RobotMap.INTAKE_ARM_FEEDFORWARD_OUTPUT_KG * Math.cos(Math.toRadians(getIntakeArmPositionDegrees()));
+    }
+
+
+    public void setIntakeArmToPosition(double angle) {
+        motorPid.setSetpoint(angle / 360, SparkMax.ControlType.kPosition, ClosedLoopSlot.kSlot0,
+                getFeedForwardValue(), SparkClosedLoopController.ArbFFUnits.kPercentOut);
+    }
+
+
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Intake Arm Position:", absoluteEncoder.getPosition());
+        SmartDashboard.putNumber("Intake Arm Position:", getIntakeArmPositionDegrees());
         SmartDashboard.putBoolean("Intake Arm Forward Limit Switch:", intakeArmMotor.getForwardLimitSwitch().isPressed());
         SmartDashboard.putBoolean("Intake Arm Reverse Limit Switch:", intakeArmMotor.getReverseLimitSwitch().isPressed());
     }
 
     public boolean hasReachedPosition(double targetAngle) {
-        return MathUtil.isNear(targetAngle, getIntakeArmPositionDegrees(), 0.3)
+        return MathUtil.isNear(targetAngle, getIntakeArmPositionDegrees(), 0.05)
                         && Math.abs(getIntakeArmVelocityRPM()) < 1;
     }
 
@@ -86,5 +99,10 @@ public class IntakeArmSystem extends SubsystemBase {
     @Override
     public void simulationPeriodic() {
         sim.update();
+    }
+
+    public void setPID(double kp, double ki, double kd) {
+        maxConfig.closedLoop.pid(kp, ki, kd);
+        intakeArmMotor.configure(maxConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 }
