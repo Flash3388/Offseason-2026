@@ -87,4 +87,8 @@ public class PitcherSystem extends SubsystemBase {
     public void simulationPeriodic() {
         sim.update();
     }
+
+    public double translateSystemAngleToFiringAngle(double systemAngle) {
+        return 0;
+    }
 }

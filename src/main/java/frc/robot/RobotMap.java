@@ -1,12 +1,17 @@
 package frc.robot;
 
+import com.thethriftybot.util.Conversion;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 
 public class RobotMap {
 
+    public static final double ROBOT_LENGTH_METERS = 0.7;
+
     private RobotMap() {}
 
-    public static final int SHOOTER_MOTOR_ID = 1;
+    public static final int SHOOTER_MOTOR_ID = 15;
     public static final double SHOOTER_P_GAIN = 0;
     public static final double SHOOTER_I_GAIN = 0;
     public static final double SHOOTER_D_GAIN = 0;
@@ -27,7 +32,7 @@ public class RobotMap {
     public static final int MAX_SHOOTER_VELOCITY_RPM = 6784;
 
     public static final DCMotor PITCHER_MOTOR = DCMotor.getNEO(1);
-    public static final double PITCHER_MASS_KG = 0;
+    public static final double PITCHER_MASS_KG = 1;
     public static final double PITCHER_LENGTH_M = 0.22;
     public static final double PITCHER_MOI = (1 / 3.0) * PITCHER_MASS_KG * PITCHER_LENGTH_M * PITCHER_LENGTH_M;
     public static final double PITCHER_GEAR_RATIO = 5;
@@ -47,4 +52,8 @@ public class RobotMap {
     public static final double CONVEYOR_SPEED = 0.5;
 
     public static final int FEEDER_MOTOR_ID = 1;
+
+    public static final Transform3d SHOOTER_ON_ROBOT = new Transform3d(new Translation3d(0, 0, 0), Rotation3d.kZero);
+    public static final double SHOOTER_ON_ROBOT_HEIGHT_METERS = 0.5;
+    public static final double HUB_HEIGHT = Units.inchesToMeters(72);
 }

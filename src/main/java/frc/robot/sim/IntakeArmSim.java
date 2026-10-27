@@ -59,7 +59,7 @@ public class IntakeArmSim implements NTSendable {
         mechanismArm = mechanismArmRoot.append(new MechanismLigament2d("arm", 0.3, 0, 7, new Color8Bit(Color.kPink)));
         mechanismSwitchBottom = mechanism.getRoot("bottomRoot", BASE_MECHANISM_ROOT_X - 0.1, BASE_MECHANISM_ROOT_HEIGHT + 0.1)
                 .append(new MechanismLigament2d("switchBottom", 0.15, 180, 6, MECHANISM_COLOR_SWITCH_OFF));
-        mechanismSwitchTop = mechanism.getRoot("topRoot", BASE_MECHANISM_ROOT_X - 0.1, BASE_MECHANISM_ROOT_HEIGHT + config.maxAngleDegrees)
+        mechanismSwitchTop = mechanism.getRoot("topRoot", BASE_MECHANISM_ROOT_X - 0.1, BASE_MECHANISM_ROOT_HEIGHT + RobotMap.INTAKE_ARM_MIN_ANGLE_DEGREES)
                 .append(new MechanismLigament2d("switchTop", 0.15, 180, 6, MECHANISM_COLOR_SWITCH_OFF));
     }
 

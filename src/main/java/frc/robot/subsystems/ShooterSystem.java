@@ -49,4 +49,12 @@ public class ShooterSystem extends SubsystemBase {
     public void simulationPeriodic() {
         sim.update();
     }
+
+    public static double calculateFiringVelocity(double shooterSpeedRpm) {
+        return shooterSpeedRpm / 60 * 2 * Math.PI * RobotMap.SHOOTER_WHEEL_RADIUS_METERS;
+    }
+
+    public double getVelocityRpm() {
+        return motor.getEncoder().getVelocity();
+    }
 }
