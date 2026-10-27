@@ -22,6 +22,20 @@ import frc.robot.subsystems.StorageSystem;
 import java.util.Set;
 
 public class Robot extends TimedRobot {
+
+    // 1. translate pitcher to firing angle (firing angle = 90 - pitcher angle)
+        // a. result from calculate = firing angle, translate pitcher angle to pid
+        // b. getter for firing angle, translate from encoder pitcher angle
+    // 2. understand firing limitations
+        // a. minimum and maximum firing distances
+        // b. minimum and maximum required pitcher angles
+        // c. select firing speed
+        // d. firing table
+            // table:
+            // distance, speed, angle
+            // 0 -> 4m
+
+
     private IntakeArmSystem intakeArmSystem;
 
     public PitcherSystem pitcherSystem;
@@ -149,7 +163,7 @@ public class Robot extends TimedRobot {
     private void launchBall() {
         Pose3d robotPose = new Pose3d(field.getRobotPose());
         Pose3d shootPose = robotPose.plus(RobotMap.SHOOTER_ON_ROBOT);
-        double firingAngleDegrees = 15;//pitcherSystem.translateSystemAngleToFiringAngle(pitcherSystem.getPitcherPositionDegrees());
+        double firingAngleDegrees = 45;//pitcherSystem.translateSystemAngleToFiringAngle(pitcherSystem.getPitcherPositionDegrees());
         double firingDirectionDegrees = robotPose.getRotation().toRotation2d().getDegrees();
         double firingVelocityRpm = 2000;//shooterSystem.getVelocityRpm();
 
