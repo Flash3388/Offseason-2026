@@ -7,6 +7,8 @@ public class RobotMap {
 
     private RobotMap() {}
 
+    public static final double SWERVE_MAX_SPEED_METERS_PER_SECOND = 5.36448;
+    public static final double SWERVE_MAX_SPEED_RAD_PER_SECOND = 4;
 
     public static final int SHOOTER_MOTOR_ID = 1;
     public static final double SHOOTER_P_GAIN = 0;
