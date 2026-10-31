@@ -1,18 +1,15 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.SwerveDriveCommand;
+import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.commands.*;
 import frc.robot.subsystems.SwerveSystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.SetPitcherToAngleCommand;
 import frc.robot.subsystems.FeederSystem;
-import frc.robot.commands.SetIntakeToPositionCommand;
 import frc.robot.subsystems.*;
-import frc.robot.commands.RotateShooterAtSpeed;
 
 public class Robot extends TimedRobot {
     private IntakeArmSystem intakeArmSystem;
@@ -32,6 +29,7 @@ public class Robot extends TimedRobot {
     private SwerveSystem swerveSystem;
     private XboxController xboxController;
 
+
     @Override
     public void robotInit() {
         swerveSystem = new SwerveSystem();        
@@ -41,10 +39,9 @@ public class Robot extends TimedRobot {
         pitcherSystem = new PitcherSystem();
         storageSystem = new StorageSystem();
         feederSystem = new FeederSystem();
-      
         xbox = new CommandXboxController(0);
       
-        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xbox));
+        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xbox.getHID()));
     }
 
     @Override
@@ -94,6 +91,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        
 
     }
 
@@ -109,8 +107,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-
-
+            Command autoCollect = new SequentialCommandGroup(
+                    new SetIntakeToPositionCommand(intakeArmSystem, 0),
+                    new DriveBackUntilFullCommand(intakeCollectorSystem, swerveSystem, new Timer()));
     }
 
     @Override
