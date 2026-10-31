@@ -1,6 +1,10 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.SwerveSystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,8 +29,12 @@ public class Robot extends TimedRobot {
 
     private FeederSystem feederSystem;
 
+    private SwerveSystem swerveSystem;
+    private XboxController xboxController;
+
     @Override
     public void robotInit() {
+        swerveSystem = new SwerveSystem();        
         this.shooterSystem = new ShooterSystem();
         intakeArmSystem = new IntakeArmSystem();
         intakeCollectorSystem = new IntakeCollectorSystem();
@@ -35,6 +43,8 @@ public class Robot extends TimedRobot {
         feederSystem = new FeederSystem();
       
         xbox = new CommandXboxController(0);
+      
+        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xbox));
     }
 
     @Override
