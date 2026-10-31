@@ -30,7 +30,6 @@ public class Robot extends TimedRobot {
     private FeederSystem feederSystem;
 
     private SwerveSystem swerveSystem;
-    private XboxController xboxController;
 
     @Override
     public void robotInit() {
@@ -44,7 +43,7 @@ public class Robot extends TimedRobot {
       
         xbox = new CommandXboxController(0);
       
-        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xbox));
+        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xbox.getHID()));
     }
 
     @Override
