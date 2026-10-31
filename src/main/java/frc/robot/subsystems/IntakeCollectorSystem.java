@@ -20,7 +20,7 @@ public class IntakeCollectorSystem extends SubsystemBase {
         SparkMaxConfig config = new SparkMaxConfig();
         config.idleMode(SparkBaseConfig.IdleMode.kCoast);
         intakeMotor.configure(config, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
-        proxy = new DigitalInput(0);
+        proxy = new DigitalInput(RobotMap.INTAKE_COLLECTOR_PROXIMITY_SWITCH_PORT);
     }
 
     public void takeInFuel(){

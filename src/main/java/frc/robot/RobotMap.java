@@ -52,6 +52,8 @@ public class RobotMap {
     public static final double INTAKE_ARM_PID_KD = 0;
     public static final double INTAKE_ARM_FEEDFORWARD_OUTPUT_KG = 0.0887;
 
+    public static final int INTAKE_COLLECTOR_PROXIMITY_SWITCH_PORT = 0;
+
 
     public static final int STORAGE_MOTOR_ID = 12;
     public static final int PROXIMITY_SENSOR_ID = 13;
