@@ -104,7 +104,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        launchBall();
+
     }
 
     @Override
@@ -134,12 +134,33 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-
+        SmartDashboard.putNumber("TestShootTargetRpm", 0);
+        SmartDashboard.putNumber("TestShootTargetAngle", 0);
+        SmartDashboard.putNumber("TestShootTargetDistance", 0);
+        SmartDashboard.putBoolean("TestShootLaunch", false);
     }
 
     @Override
     public void testPeriodic() {
+        boolean launch = SmartDashboard.getBoolean("TestShootLaunch", false);
+        if (launch) {
+            SmartDashboard.putBoolean("TestShootLaunch", false);
 
+            double targetRpm = SmartDashboard.getNumber("TestShootTargetRpm", 0);
+            double targetAngle = SmartDashboard.getNumber("TestShootTargetAngle", 0);
+
+
+            double targetDistance = SmartDashboard.getNumber("TestShootTargetDistance", 0);
+            Pose2d hunPose = gameField.getHubPosition();
+            Pose2d wantedRobotPose = new Pose2d(hunPose.getX() - targetDistance, hunPose.getY(), Rotation2d.kZero);
+            field.setRobotPose(wantedRobotPose);
+
+            Pose3d robotPose = new Pose3d(field.getRobotPose());
+            Pose3d shootPose = robotPose.plus(RobotMap.SHOOTER_ON_ROBOT);
+            double firingDirectionDegrees = robotPose.getRotation().toRotation2d().getDegrees();
+
+            ballSim.launchBall(shootPose.getTranslation(), firingDirectionDegrees, targetRpm, targetAngle);
+        }
     }
 
     @Override
