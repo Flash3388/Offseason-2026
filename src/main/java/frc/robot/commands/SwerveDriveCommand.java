@@ -27,9 +27,9 @@ public class SwerveDriveCommand extends Command {
         double Ly = -xboxController.getLeftY();
         double Rx = -xboxController.getRightX();
 
-        if (MathUtil.isNear(0, Lx, 0.04)) {Lx = 0;}
-        if (MathUtil.isNear(0, Ly, 0.04)) {Ly = 0;}
-        if (MathUtil.isNear(0, Rx, 0.04 )) {Rx = 0;}
+        if (MathUtil.isNear(0, Lx, RobotMap.DRIVER_CONTROLLER_DEADZONE_L_STICK)) {Lx = 0;}
+        if (MathUtil.isNear(0, Ly, RobotMap.DRIVER_CONTROLLER_DEADZONE_L_STICK)) {Ly = 0;}
+        if (MathUtil.isNear(0, Rx, RobotMap.DRIVER_CONTROLLER_DEADZONE_R_STICK )) {Rx = 0;}
 
         swerveSystem.drive(
                 Ly * Math.abs(Ly) * RobotMap.SWERVE_MAX_SPEED_METERS_PER_SECOND,

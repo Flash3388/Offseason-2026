@@ -7,6 +7,9 @@ public class RobotMap {
 
     private RobotMap() {}
 
+    public static final double DRIVER_CONTROLLER_DEADZONE_L_STICK = 0.03;
+    public static final double DRIVER_CONTROLLER_DEADZONE_R_STICK = 0.03;
+
     public static final double SWERVE_MAX_SPEED_METERS_PER_SECOND = 5.36448;
     public static final double SWERVE_MAX_SPEED_RAD_PER_SECOND = 4;
 
