@@ -12,12 +12,10 @@ import frc.robot.commands.FeedBallsToShooter;
 import frc.robot.commands.SetPitcherToAngleCommand;
 import frc.robot.sim.BallSim;
 import frc.robot.sim.FiringDisplay;
-import frc.robot.subsystems.FeederSystem;
+import frc.robot.subsystems.*;
 import frc.robot.commands.RotateShooterAtSpeed;
-import frc.robot.subsystems.ShooterSystem;
-import frc.robot.subsystems.IntakeArmSystem;
-import frc.robot.subsystems.PitcherSystem;
-import frc.robot.subsystems.StorageSystem;
+import org.apache.commons.math3.analysis.UnivariateFunction;
+import org.apache.commons.math3.analysis.interpolation.LinearInterpolator;
 
 import java.util.Set;
 
@@ -42,12 +40,21 @@ public class Robot extends TimedRobot {
 
     private ShooterSystem shooterSystem;
 
+    private InterpolutionSystem interpolutionSystem;
+
     private StorageSystem storageSystem;
     private FeederSystem feederSystem;
     private GameField gameField;
     private Field2d field;
 
+    private double[] distances;
+    private double[] angles;
+    private double[] velocites;
+
     private BallSim ballSim;
+    private LinearInterpolator interpolator;
+    private UnivariateFunction functionAngle;
+    private UnivariateFunction functionDistance;
 
     @Override
     public void robotInit() {
@@ -64,6 +71,13 @@ public class Robot extends TimedRobot {
 
         SmartDashboard.putData("Field", field);
         field.setRobotPose(new Pose2d(1, 1, Rotation2d.kZero));
+        interpolator = new LinearInterpolator();
+        angles = new double[]{85 , 82 , 79 , 75 , 75 , 76 , 77};
+        distances = new double[]{1 , 1.5 , 2 , 2.5 , 3 , 3.5 , 4};
+        velocites = new double[]{2000 , 2000 , 2000 , 2000 , 2150 , 2350 , 2550};
+
+        functionAngle = interpolator.interpolate(distances, angles);
+        functionDistance = interpolator.interpolate(distances , velocites);
     }
 
     @Override
@@ -138,19 +152,30 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("TestShootTargetAngle", 0);
         SmartDashboard.putNumber("TestShootTargetDistance", 0);
         SmartDashboard.putBoolean("TestShootLaunch", false);
+        SmartDashboard.putBoolean("TestThingamajig" , false);
     }
 
     @Override
     public void testPeriodic() {
+        double targetAngle = 0;
+        double targetRpm = 0;
+        boolean testthingamajiog = SmartDashboard.getBoolean("TestThingamajig" , false);
         boolean launch = SmartDashboard.getBoolean("TestShootLaunch", false);
         if (launch) {
             SmartDashboard.putBoolean("TestShootLaunch", false);
-
-            double targetRpm = SmartDashboard.getNumber("TestShootTargetRpm", 0);
-            double targetAngle = SmartDashboard.getNumber("TestShootTargetAngle", 0);
-
-
             double targetDistance = SmartDashboard.getNumber("TestShootTargetDistance", 0);
+            if(testthingamajiog) {
+                targetAngle = functionAngle.value(targetDistance);
+                targetRpm = functionDistance.value(targetDistance);
+            }
+            else {
+                targetRpm = SmartDashboard.getNumber("TestShootTargetRpm", 0);
+                targetAngle = SmartDashboard.getNumber("TestShootTargetAngle", 0);
+            }
+
+
+            SmartDashboard.putNumber("TestAngle" , targetAngle);
+            SmartDashboard.putNumber("TestVelocity" , targetRpm);
             Pose2d hunPose = gameField.getHubPosition();
             Pose2d wantedRobotPose = new Pose2d(hunPose.getX() - targetDistance, hunPose.getY(), Rotation2d.kZero);
             field.setRobotPose(wantedRobotPose);
@@ -160,6 +185,9 @@ public class Robot extends TimedRobot {
             double firingDirectionDegrees = robotPose.getRotation().toRotation2d().getDegrees();
 
             ballSim.launchBall(shootPose.getTranslation(), firingDirectionDegrees, targetRpm, targetAngle);
+
+            CommandScheduler.getInstance().schedule( new SetPitcherToAngleCommand(pitcherSystem , interpolutionSystem.GetAngleFromDistance(targetDistance)));
+            CommandScheduler.getInstance().schedule( new RotateShooterAtSpeed(shooterSystem , interpolutionSystem.GetVelocityRPMFromDistance(targetDistance)));
         }
     }
 

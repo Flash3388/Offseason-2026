@@ -9,7 +9,7 @@ public class SetPitcherToAngleCommand extends Command {
 
     public SetPitcherToAngleCommand(PitcherSystem pitcherSubsystem, double angle) {
         this.pitcherSystem = pitcherSubsystem;
-        this.targetPosition = angle / 360;
+        this.targetPosition = (90-angle) / 360;
 
         addRequirements(pitcherSubsystem);
     }
