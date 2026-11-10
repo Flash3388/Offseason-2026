@@ -46,7 +46,4 @@ public class SwerveDriveCommand extends Command {
     public boolean isFinished() {
         return false;
     }
-
-
-    //BR 3.7deg clockwise
 }

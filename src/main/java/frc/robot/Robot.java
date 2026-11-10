@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.apriltag.AprilTagPoseEstimator;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -37,12 +38,12 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         swerveSystem = new SwerveSystem();        
-        this.shooterSystem = new ShooterSystem();
-        intakeArmSystem = new IntakeArmSystem();
-        intakeCollectorSystem = new IntakeCollectorSystem();
-        pitcherSystem = new PitcherSystem();
-        storageSystem = new StorageSystem();
-        feederSystem = new FeederSystem();
+//        this.shooterSystem = new ShooterSystem();
+//        intakeArmSystem = new IntakeArmSystem();
+//        intakeCollectorSystem = new IntakeCollectorSystem();
+//        pitcherSystem = new PitcherSystem();
+//        storageSystem = new StorageSystem();
+//        feederSystem = new FeederSystem();
       
         xbox = new CommandXboxController(0);
       
@@ -52,13 +53,21 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
-        if (limelightMeasurement.tagCount >= 2) {  // Only trust measurement if we see multiple tags
-            swerveSystem.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
-            swerveSystem.addVisionMeasurement(
-                    limelightMeasurement.pose,
-                    limelightMeasurement.timestampSeconds
-            );
-        }
+
+
+        try {
+            double distToTag = LimelightHelpers.getRawFiducials("limelight")[0].distToRobot  - 0.925;
+            if(distToTag > RobotMap.LIMELIGHT_MIN_ACCURATE_DISTANCE && distToTag < RobotMap.LIMELIGHT_MAX_ACCURATE_DISTANCE) {
+                swerveSystem.addVisionMeasurement(
+                        limelightMeasurement.pose,
+                        limelightMeasurement.timestampSeconds
+                );
+                SmartDashboard.putNumber("distance to AprilTag", distToTag);
+            }
+//            SmartDashboard.putNumber("distance to AprilTag", distToTag);
+        } catch (RuntimeException e) {}
+
+        CommandScheduler.getInstance().run();
     }
 
     @Override

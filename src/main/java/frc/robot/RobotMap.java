@@ -58,4 +58,7 @@ public class RobotMap {
     public static final double CONVEYOR_SPEED = 0.5;
 
     public static final int FEEDER_MOTOR_ID = 68;
+
+    public static final double LIMELIGHT_MAX_ACCURATE_DISTANCE = 2.6;
+    public static final double LIMELIGHT_MIN_ACCURATE_DISTANCE = 1.3;
 }
