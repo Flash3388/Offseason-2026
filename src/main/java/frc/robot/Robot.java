@@ -5,17 +5,46 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.SwerveDriveCommand;
 import frc.robot.subsystems.SwerveSystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.SetPitcherToAngleCommand;
+import frc.robot.subsystems.FeederSystem;
+import frc.robot.commands.SetIntakeToPositionCommand;
+import frc.robot.subsystems.*;
+import frc.robot.commands.RotateShooterAtSpeed;
 
 public class Robot extends TimedRobot {
+    private IntakeArmSystem intakeArmSystem;
+
+    private IntakeCollectorSystem intakeCollectorSystem;
+
+    public PitcherSystem pitcherSystem;
+
+    private ShooterSystem shooterSystem;
+
+    private CommandXboxController xbox;
+
+    private StorageSystem storageSystem;
+
+    private FeederSystem feederSystem;
 
     private SwerveSystem swerveSystem;
     private XboxController xboxController;
 
     @Override
     public void robotInit() {
-        swerveSystem = new SwerveSystem();
-        xboxController = new XboxController(0);
-        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xboxController));
+        swerveSystem = new SwerveSystem();        
+        this.shooterSystem = new ShooterSystem();
+        intakeArmSystem = new IntakeArmSystem();
+        intakeCollectorSystem = new IntakeCollectorSystem();
+        pitcherSystem = new PitcherSystem();
+        storageSystem = new StorageSystem();
+        feederSystem = new FeederSystem();
+      
+        xbox = new CommandXboxController(0);
+      
+        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xbox));
     }
 
     @Override
@@ -50,11 +79,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        //swerveSystem.swerveDrive.getModules()[1].setAngle(0);
-        //swerveSystem.swerveDrive.getModules()[2].setAngle(0);
-        //swerveSystem.swerveDrive.getModules()[3].setAngle(0);
-        //swerveSystem.swerveDrive.getModules()[4].setAngle(0);
-        //swerveSystem.drive(1, 0, 0);
+      
     }
 
     @Override
@@ -84,6 +109,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
+
 
     }
 
