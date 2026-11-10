@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.LimelightHelpers;
 import frc.robot.RobotMap;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
@@ -30,5 +31,9 @@ public class SwerveSystem extends SubsystemBase {
 
     public void stop() {
         swerveDrive.drive(new ChassisSpeeds(0, 0, 0));
+    }
+
+    public void addVisionMeasurement(LimelightHelpers.PoseEstimate poseEstimate) {
+        swerveDrive.addVisionMeasurement(poseEstimate.pose, poseEstimate.timestampSeconds);
     }
 }

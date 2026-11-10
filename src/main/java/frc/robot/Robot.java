@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagPoseEstimator;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,7 +32,7 @@ public class Robot extends TimedRobot {
     private FeederSystem feederSystem;
 
     private SwerveSystem swerveSystem;
-    private XboxController xboxController;
+
 
     @Override
     public void robotInit() {
@@ -44,12 +46,19 @@ public class Robot extends TimedRobot {
       
         xbox = new CommandXboxController(0);
       
-        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xbox));
+        swerveSystem.setDefaultCommand(new SwerveDriveCommand(swerveSystem, xbox.getHID()));
     }
 
     @Override
     public void robotPeriodic() {
-        CommandScheduler.getInstance().run();
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+        if (limelightMeasurement.tagCount >= 2) {  // Only trust measurement if we see multiple tags
+            swerveSystem.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999));
+            swerveSystem.addVisionMeasurement(
+                    limelightMeasurement.pose,
+                    limelightMeasurement.timestampSeconds
+            );
+        }
     }
 
     @Override
