@@ -14,7 +14,6 @@ import java.io.IOException;
 
 public class SwerveSystem extends SubsystemBase {
     public final SwerveDrive swerveDrive;
-    private DigitalInput proxy;
 
     public SwerveSystem() {
         File file = new File(Filesystem.getDeployDirectory(), "swerve");
@@ -25,7 +24,6 @@ public class SwerveSystem extends SubsystemBase {
         catch (IOException e){
             throw new Error(e);
         }
-        proxy = new DigitalInput(0);
     }
 
     public void drive(double velocityX,double velocityY, double velocityRotation ) {
