@@ -1,39 +1,36 @@
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagPoseEstimator;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.SwerveDriveCommand;
+import frc.robot.subsystems.SwerveSystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.*;
-import frc.robot.subsystems.SwerveSystem;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.subsystems.FeederSystem;
 import frc.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
+  
     private IntakeArmSystem intakeArmSystem;
-
     private IntakeCollectorSystem intakeCollectorSystem;
-
-    public PitcherSystem pitcherSystem;
-
+    private PitcherSystem pitcherSystem;
     private ShooterSystem shooterSystem;
-
-    private CommandXboxController xbox;
-
     private StorageSystem storageSystem;
-
     private FeederSystem feederSystem;
-
     private SwerveSystem swerveSystem;
-    private XboxController xboxController;
+    private CommandXboxController xbox;
 
 
     @Override
     public void robotInit() {
         swerveSystem = new SwerveSystem();        
-        this.shooterSystem = new ShooterSystem();
+        shooterSystem = new ShooterSystem();
         intakeArmSystem = new IntakeArmSystem();
         intakeCollectorSystem = new IntakeCollectorSystem();
         pitcherSystem = new PitcherSystem();
@@ -46,6 +43,18 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotPeriodic() {
+        try {
+            LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+            double distToTag = LimelightHelpers.getRawFiducials("limelight")[0].distToRobot  - 0.925;
+            if(distToTag > RobotMap.LIMELIGHT_MIN_ACCURATE_DISTANCE && distToTag < RobotMap.LIMELIGHT_MAX_ACCURATE_DISTANCE) {
+                swerveSystem.addVisionMeasurement(
+                        limelightMeasurement.pose,
+                        limelightMeasurement.timestampSeconds
+                );
+                SmartDashboard.putNumber("distance to AprilTag", distToTag);
+            }
+        } catch (RuntimeException e) {}
+
         CommandScheduler.getInstance().run();
     }
 
@@ -107,9 +116,9 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-            Command autoCollect = new SequentialCommandGroup(
-                    new SetIntakeToPositionCommand(intakeArmSystem, 0),
-                    new DriveBackUntilFullCommand(intakeCollectorSystem, swerveSystem, new Timer()));
+//            Command autoCollect = new SequentialCommandGroup(
+//                    new SetIntakeToPositionCommand(intakeArmSystem, 0),
+//                    new DriveBackUntilFullCommand(intakeCollectorSystem, swerveSystem, new Timer()));
     }
 
     @Override
